@@ -1,0 +1,43 @@
+{
+  "name": "rockingthebumpprisma",
+  "version": "1.0.0",
+  "description": "backend rocking the bump",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "graphql": "^14.0.2",
+    "graphql-cli": "^3.0.3",
+    "graphql-yoga": "^1.16.7",
+    "nodemon": "^1.18.9",
+    "npm-run-all": "^4.1.5",
+    "prisma": "^1.23.0",
+    "prisma-binding": "^2.2.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon -e js,graphql -x node src/index.js",
+    "debug": "nodemon -e js,graphql -x node --inspect src/index.js",
+    "test": "jest",
+    "playground": "graphql playground",
+    "deploy": "prisma deploy",
+    "dev": "npm-run-all --parallel debug playground"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romanbrito/rockingthebumpPrisma.git"
+  },
+  "keywords": [
+    "prisma"
+  ],
+  "author": "Roman Brito",
+  "license": "ISC",
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/romanbrito/rockingthebumpPrisma/issues"
+  },
+  "homepage": "https://github.com/romanbrito/rockingthebumpPrisma#readme"
+}
