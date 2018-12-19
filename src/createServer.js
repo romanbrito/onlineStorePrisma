@@ -15,7 +15,7 @@ function createServer() {
     resolverValidationOptions: {
       requireResolversForResolveType: false,
     },
-    context: req => ({ ...req, db }),
+    context: req => ({ ...req, db }), //ctx to have access to prisma and express request
   });
 }
 
