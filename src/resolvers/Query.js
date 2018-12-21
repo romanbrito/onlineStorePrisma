@@ -17,14 +17,14 @@ const Query = {
     ); // info is the query from the front end
   },
   async users(parent, args, ctx, info) {
-    // 1. check if they are logged in and check permission to query all users
+    // 1. check if they are logged in
     if (!ctx.request.userId) {
       throw new Error('You must be logged in!');
     }
-
+    // 2. check if user has permission to query
     hasPermission(ctx.request.user, ['ADMIN', 'PERMISSIONUPDATE']);
 
-    // 2. query all the users
+    // 3. query all the users
     return ctx.db.query.users({}, info); //info contains all the graphql query that contain the fields
                                     // we are requesting from front end
 
