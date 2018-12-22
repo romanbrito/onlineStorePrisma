@@ -58,7 +58,7 @@ const Mutations = {
         ['ADMIN', 'ITEMDELETE'].includes(permission)
     );
 
-    if(!ownsItem && !hasPermissions) {
+    if (!ownsItem && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
     // 3. Delete it!
@@ -182,15 +182,15 @@ const Mutations = {
   },
   async updatePermissions(parent, args, ctx, info) {
     // 1. Check if they are logged in
-    if(!ctx.request.userId) {
+    if (!ctx.request.userId) {
       throw new Error('You most be logged in!');
     }
     // 2. Query the current user
     const currentuser = await ctx.db.query.user({
-      where: {
-        id: ctx.request.userId,
-      }
-    },
+        where: {
+          id: ctx.request.userId,
+        }
+      },
       info
     );
     // 3. Check if they have permissions to do this
@@ -206,6 +206,43 @@ const Mutations = {
         id: args.userId
       }
     })
+  },
+  async addToCart(parent, args, ctx, info) {
+    // 1. Make suer they are signed in
+    const {userId} = ctx.request;
+    if (!userId) {
+      throw new Error('You must be signed in');
+    }
+    // 2. Query the users current cart
+    const [existingCartItem] = await ctx.db.query.cartItems({ //array destructuring for the first element returned
+      where: {
+        user: {id: userId},
+        item: {id: args.id}
+      }
+    });
+    // 3. Check if that item is already in their car and increment by 1 if it is
+    if (existingCartItem) {
+      console.log('This item is already in cart');
+      return ctx.db.mutation.updateCartItem({
+          where: {id: existingCartItem.id},
+          data: {quantity: existingCartItem.quantity + 1}
+        },
+        info
+      );
+    }
+    // 4. If its not, create a fresh CartItem for that user.
+    return ctx.db.mutation.createCartItem({
+        data: {
+          user: {
+            connect: {id: userId} // user relation connection
+          },
+          item: {
+            connect: {id: args.id}
+          }
+        }
+      },
+      info
+    );
   }
 };
 
